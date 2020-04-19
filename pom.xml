@@ -40,17 +40,31 @@
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <!--		<dependency>-->
-        <!--			<groupId>org.springframework.boot</groupId>-->
-        <!--			<artifactId>spring-boot-starter-test</artifactId>-->
-        <!--			<scope>test</scope>-->
-        <!--			<exclusions>-->
-        <!--				<exclusion>-->
-        <!--					<groupId>org.junit.vintage</groupId>-->
-        <!--					<artifactId>junit-vintage-engine</artifactId>-->
-        <!--				</exclusion>-->
-        <!--			</exclusions>-->
-        <!--		</dependency>-->
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.7.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.7.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+
+        		<dependency>
+        			<groupId>org.springframework.boot</groupId>
+        			<artifactId>spring-boot-starter-test</artifactId>
+        			<scope>test</scope>
+        			<exclusions>
+        				<exclusion>
+        					<groupId>org.junit.vintage</groupId>
+        					<artifactId>junit-vintage-engine</artifactId>
+        				</exclusion>
+        			</exclusions>
+        		</dependency>
     </dependencies>
 
     <build>
@@ -76,6 +90,7 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+
     </repositories>
     <pluginRepositories>
         <pluginRepository>

@@ -1,5 +1,6 @@
 package com.demoapp.demo.controller;
 
+import com.demoapp.demo.ApplicationConstants;
 import com.demoapp.demo.model.User;
 import com.demoapp.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class AdminController {
      * this method returns the json of all the users on the root screen
      * i.e.: localhost:port
      */
-    @GetMapping("/")
+    @GetMapping(ApplicationConstants.GET_ALL_USERS)
     public List<User> displayAllUsers(){
         return userService.displayAllUsers();
     }
@@ -26,25 +27,24 @@ public class AdminController {
     /**
      * @param id: id Of the user to be retrieved
      */
-    @GetMapping("/getUser/{id}")
+    @GetMapping(ApplicationConstants.GET_USER_BY_ID)
     public Optional<User> getUserById(@PathVariable Integer id){
         return userService.getUserById(id);
     }
 
-    @PostMapping("/addUser")
+    @PostMapping(ApplicationConstants.ADD_ONE_USER)
     public void addUser(User user){
         userService.addUser(user);
     }
 
-    @PutMapping("/updateUser/{id}")
+    @PutMapping(ApplicationConstants.UPDATE_ONE_USER)
     public void updateUser(@PathVariable Integer id, User userToUpdate){
         userService.updateUser(id, userToUpdate);
     }
 
-    @DeleteMapping("/deleteUser/{id}")
+    @DeleteMapping(ApplicationConstants.DELETE_ONE_USER)
     public void deleteUserById(@PathVariable Integer id){
         userService.deleteUserById(id);
     }
-
 
 }

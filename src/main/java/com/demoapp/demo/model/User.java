@@ -15,7 +15,7 @@ public class User {
     @Column
     String age;
 
-    @Column
+    @Column(nullable = false)
     UserType userType;
 
     public Integer getUserID() {
