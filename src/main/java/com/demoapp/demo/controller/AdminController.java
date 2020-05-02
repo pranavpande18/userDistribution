@@ -19,6 +19,7 @@ public class AdminController {
      * this method returns the json of all the users on the root screen
      * i.e.: localhost:port
      */
+    @CrossOrigin
     @GetMapping(ApplicationConstants.GET_ALL_USERS)
     public List<User> displayAllUsers(){
         return userService.displayAllUsers();
@@ -27,21 +28,25 @@ public class AdminController {
     /**
      * @param id: id Of the user to be retrieved
      */
+    @CrossOrigin
     @GetMapping(ApplicationConstants.GET_USER_BY_ID)
     public Optional<User> getUserById(@PathVariable Integer id){
         return userService.getUserById(id);
     }
 
+    @CrossOrigin
     @PostMapping(ApplicationConstants.ADD_ONE_USER)
     public void addUser(User user){
         userService.addUser(user);
     }
 
+    @CrossOrigin
     @PutMapping(ApplicationConstants.UPDATE_ONE_USER)
     public void updateUser(@PathVariable Integer id, User userToUpdate){
         userService.updateUser(id, userToUpdate);
     }
 
+    @CrossOrigin
     @DeleteMapping(ApplicationConstants.DELETE_ONE_USER)
     public void deleteUserById(@PathVariable Integer id){
         userService.deleteUserById(id);
