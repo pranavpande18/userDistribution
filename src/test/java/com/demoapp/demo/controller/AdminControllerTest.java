@@ -35,7 +35,7 @@ public class AdminControllerTest {
         user.setUserID(1);
         user.setName("Aviral");
         user.setAge("27");
-        user.setUserType(UserType.BUYER);
+        user.setUserType(UserType.DOCTOR);
         adminController.addUser(user);
 
     }
