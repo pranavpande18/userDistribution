@@ -12,6 +12,7 @@ import com.demoapp.demo.repository.UserTypeRepository;
 import com.demoapp.demo.security.jwt.JwtUtils;
 import com.demoapp.demo.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -56,10 +58,10 @@ public class AuthController {
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
 
+        List<String> roles = new ArrayList<>();
+        String userType = userDetails.getAuthorities().toString();
+        roles.add(userType);
         return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
                 userDetails.getUsername(),
@@ -67,8 +69,10 @@ public class AuthController {
                 roles));
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+    //@PostMapping("/signup")
+    @RequestMapping(value="/signup", method = RequestMethod.POST,
+                    consumes= MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
@@ -81,42 +85,46 @@ public class AuthController {
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
 
+        UserType userType = signUpRequest.getUserType();
+
+        //UserType strUserType = signUpRequest.getUserType();
         // Create new user's account
         User user = new User(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
+                encoder.encode(signUpRequest.getPassword()),
+                userType);
 
-        Set<String> strRoles = signUpRequest.getRole();
-        Set<UserType> roles = new HashSet<>();
 
-        if (strRoles == null) {
-            UserType userType = userTypeRepository.findByUserType(UserTypes.DOCTOR)
-                    .orElseThrow(() -> new RuntimeException("Error: UserType is not found."));
-            roles.add(userType);
-        } else {
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case "admin":
-                        UserType adminRole = userTypeRepository.findByUserType(UserTypes.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
 
-                        break;
-                    case "Doctor":
-                        UserType docRole = userTypeRepository.findByUserType(UserTypes.DOCTOR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(docRole);
 
-                        break;
-                    default:
-                        UserType userRole = userTypeRepository.findByUserType(UserTypes.PATIENT)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
-                }
-            });
-        }
+//        if (strRoles == null) {
+//            UserType userType = userTypeRepository.findByUserType(UserTypes.DOCTOR)
+//                    .orElseThrow(() -> new RuntimeException("Error: UserType is not found."));
+//            roles.add(userType);
+//        } else {
+//            strRoles.forEach(role -> {
+//                switch (role) {
+//                    case "admin":
+//                        UserType adminRole = userTypeRepository.findByUserType(UserTypes.ROLE_ADMIN)
+//                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+//                        roles.add(adminRole);
+//
+//                        break;
+//                    case "Doctor":
+//                        UserType docRole = userTypeRepository.findByUserType(UserTypes.DOCTOR)
+//                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+//                        roles.add(docRole);
+//
+//                        break;
+//                    default:
+//                        UserType userRole = userTypeRepository.findByUserType(UserTypes.PATIENT)
+//                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+//                        roles.add(userRole);
+//                }
+//            });
+//        }
 
-        user.setUserTypes(roles);
+//Set<String> strRoles = signUpRequest.getRole();
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));

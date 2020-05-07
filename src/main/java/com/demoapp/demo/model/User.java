@@ -32,19 +32,26 @@ public class User {
     @Size(max = 120)
     private String password;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(	name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<UserType> userTypes = new HashSet<>();
+//    @OneToMany(fetch = FetchType.LAZY)
+//    @JoinTable(	name = "user_roles",
+//            joinColumns = @JoinColumn(name = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "role_id"))
+//    private Set<UserType> userTypes = new HashSet<>();
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @JoinTable(name = "user_roles",
+    joinColumns = @JoinColumn(name="user_id"),
+    inverseJoinColumns = @JoinColumn(name="role_id"))
+    private UserType userType;
 
     public User() {
     }
 
-    public User(String username, String email, String password) {
+    public User(String username, String email, String password, UserType userType) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.userType = userType;
     }
 
     public Long getId() {
@@ -79,11 +86,19 @@ public class User {
         this.password = password;
     }
 
-    public Set<UserType> getUserTypes() {
-        return userTypes;
+//    public Set<UserType> getUserTypes() {
+//        return userTypes;
+//    }
+//
+//    public void setUserTypes(Set<UserType> userTypes) {
+//        this.userTypes= userTypes;
+//    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
 
-    public void setUserTypes(Set<UserType> userTypes) {
-        this.userTypes= userTypes;
+    public UserType getUserType() {
+        return userType;
     }
 }
