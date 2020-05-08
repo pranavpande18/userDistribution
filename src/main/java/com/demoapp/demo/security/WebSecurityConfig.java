@@ -1,5 +1,6 @@
 package com.demoapp.demo.security;
 
+import com.demoapp.demo.ApplicationConstants;
 import com.demoapp.demo.security.jwt.AuthEntryPointJwt;
 import com.demoapp.demo.security.jwt.AuthTokenFilter;
 import com.demoapp.demo.security.services.UserDetailsServiceImpl;
@@ -30,6 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //    @Autowired
 //    private AuthEntryPointJwt authEntryPointJwt;
 
+
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();
@@ -53,16 +55,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
-//                .exceptionHandling().authenticationEntryPoint(authEntryPointJwt).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/test/**").permitAll()
-                .antMatchers("/**").authenticated()
-                .anyRequest().authenticated()
-                .and()
-                .oauth2Login();
+        http.cors();
 
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        http.authorizeRequests().antMatchers(ApplicationConstants.DEV_UTILS_WHITELIST).permitAll();
+
+        http.authorizeRequests().antMatchers(ApplicationConstants.API_AUTH_URLS).permitAll()
+            .antMatchers().permitAll()
+            .antMatchers(ApplicationConstants.API_TEST_URLS).permitAll()
+            .antMatchers("/**").denyAll()
+            .anyRequest().authenticated();
+
+        http.oauth2Login();
+
+        http.csrf().disable();
+        http.headers().frameOptions().disable();
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

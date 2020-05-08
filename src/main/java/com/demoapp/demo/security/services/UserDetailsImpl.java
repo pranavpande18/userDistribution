@@ -37,9 +37,6 @@ public class UserDetailsImpl implements UserDetails
     }
 
     public static UserDetailsImpl build(User user) {
-//        List<GrantedAuthority> authorities = user.getUserTypes().stream()
-//                .map(userType -> new SimpleGrantedAuthority(userType.getUserTypes().name()))
-//                .collect(Collectors.toList());
         List<GrantedAuthority> authorities = new ArrayList<>();
         GrantedAuthority authority = new SimpleGrantedAuthority(user.getUserType().toString());
         authorities.add(authority);
