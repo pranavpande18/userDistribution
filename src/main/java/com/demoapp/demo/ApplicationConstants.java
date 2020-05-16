@@ -16,7 +16,8 @@ public interface ApplicationConstants {
             "/configuration/security",
             "/swagger-ui.html",
             "/webjars/**",
-            "/h2-console/**"
+            "/h2-console/**",
+            "/api/patient/**"
             // other public endpoints of your API may be appended to this array
     };
 

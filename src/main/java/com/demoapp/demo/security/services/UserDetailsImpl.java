@@ -1,6 +1,7 @@
 package com.demoapp.demo.security.services;
 
 import com.demoapp.demo.model.User;
+import com.demoapp.demo.model.UserType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,13 +23,17 @@ public class UserDetailsImpl implements UserDetails
 
     private String email;
 
+    private UserType userType = new UserType();
+
+    private String role;
+
     @JsonIgnore
     private String password;
 
     private Collection<? extends GrantedAuthority> authorities;
 
     public UserDetailsImpl(Long id, String username, String email, String password,
-                           Collection<? extends GrantedAuthority> authorities) {
+                           Collection<? extends GrantedAuthority> authorities, String role) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -45,11 +50,13 @@ public class UserDetailsImpl implements UserDetails
                 user.getUsername(),
                 user.getEmail(),
                 user.getPassword(),
-                authorities);
+                authorities,
+                user.getUserType().getUserTypes().name());
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+
         return authorities;
     }
 
