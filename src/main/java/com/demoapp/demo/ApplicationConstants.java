@@ -22,7 +22,8 @@ public interface ApplicationConstants {
             "/webjars/**",
             "/h2-console/**",
             "/api/doctor/getMedicalShops",
-            "/api/doctor/getPathologyLabs"
+            "/api/doctor/getPathologyLabs",
+            "/api/patient/**"
             // other public endpoints of your API may be appended to this array
     };
 
@@ -45,4 +46,7 @@ public interface ApplicationConstants {
     String CONST_SENSOR = "&sensor=true";
     String CONST_PHARMACY = "&types=pharmacy";
     String CONST_PATHOLOGY = "&keyword=pathology+lab";
+
+    String API_PATIENT_ROOT = "/api/patient";
+    String API_GET_DOCTORS = "/getDoctorss";
 }

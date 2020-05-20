@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.repository.cdi.Eager;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class UserType {
@@ -22,7 +23,6 @@ public class UserType {
     }
 
     public UserType(String userType){
-        System.out.println(userType);
         if(userType.equals(UserTypes.DOCTOR.name())){
             this.userType = UserTypes.DOCTOR;
         }else if(userType.equals(UserTypes.PATIENT.name())){
@@ -47,5 +47,25 @@ public class UserType {
 
     public void setUserTypes(UserTypes userTypes) {
         this.userType = userTypes;
+    }
+
+    @Override
+    public String toString() {
+        return
+                userType.name()
+               ;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserType)) return false;
+        UserType userType1 = (UserType) o;
+        return userType == userType1.userType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userType);
     }
 }
